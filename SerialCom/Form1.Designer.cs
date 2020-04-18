@@ -281,6 +281,7 @@
             this.dsRecvData.Location = new System.Drawing.Point(247, 38);
             this.dsRecvData.Multiline = true;
             this.dsRecvData.Name = "dsRecvData";
+            this.dsRecvData.ReadOnly = true;
             this.dsRecvData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dsRecvData.Size = new System.Drawing.Size(623, 365);
             this.dsRecvData.TabIndex = 9;
@@ -297,6 +298,7 @@
             this.checkBoxAutoSave.TabIndex = 8;
             this.checkBoxAutoSave.Text = "存储log";
             this.checkBoxAutoSave.UseVisualStyleBackColor = true;
+            this.checkBoxAutoSave.CheckedChanged += new System.EventHandler(this.checkBoxAutoSave_CheckedChanged);
             // 
             // btnOpenLog
             // 
@@ -310,6 +312,7 @@
             // 
             // Form1
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 555);
