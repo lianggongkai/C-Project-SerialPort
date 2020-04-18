@@ -1,0 +1,26 @@
+c:\users\administrator\documents\visual studio 2015\Projects\SerialCom\SerialCom\bin\Debug\SerialCom.exe.config
+c:\users\administrator\documents\visual studio 2015\Projects\SerialCom\SerialCom\bin\Debug\SerialCom.exe
+c:\users\administrator\documents\visual studio 2015\Projects\SerialCom\SerialCom\bin\Debug\SerialCom.pdb
+c:\users\administrator\documents\visual studio 2015\Projects\SerialCom\SerialCom\obj\Debug\SerialCom.Form1.resources
+c:\users\administrator\documents\visual studio 2015\Projects\SerialCom\SerialCom\obj\Debug\SerialCom.Properties.Resources.resources
+c:\users\administrator\documents\visual studio 2015\Projects\SerialCom\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
+c:\users\administrator\documents\visual studio 2015\Projects\SerialCom\SerialCom\obj\Debug\SerialCom.exe
+c:\users\administrator\documents\visual studio 2015\Projects\SerialCom\SerialCom\obj\Debug\SerialCom.pdb
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\bin\Debug\SerialCom.exe.config
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\obj\Debug\SerialCom.exe
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\obj\Debug\SerialCom.pdb
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\bin\Debug\SerialCom.exe
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\bin\Debug\SerialCom.pdb
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\obj\Debug\SerialCom.csprojResolveAssemblyReference.cache
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\obj\Debug\SerialCom.Form1.resources
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\obj\Debug\SerialCom.Properties.Resources.resources
+K:\BaiduNetdiskDownload\SerialCom\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.exe.config
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.exe
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.pdb
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.exe
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.pdb
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csprojResolveAssemblyReference.cache
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Form1.resources
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Properties.Resources.resources
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
