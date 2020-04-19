@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.PortSet = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -43,15 +42,13 @@
             this.dsBaudrate = new System.Windows.Forms.ComboBox();
             this.dsPortName = new System.Windows.Forms.ComboBox();
             this.btnOpenUart = new System.Windows.Forms.Button();
-            this.SerialPort = new System.IO.Ports.SerialPort(this.components);
-            this.label7 = new System.Windows.Forms.Label();
             this.dsAssic = new System.Windows.Forms.RadioButton();
             this.dsHex = new System.Windows.Forms.RadioButton();
             this.gr = new System.Windows.Forms.GroupBox();
             this.checkBoxSelectTimestamp = new System.Windows.Forms.CheckBox();
             this.dsRecvData = new System.Windows.Forms.TextBox();
             this.checkBoxAutoSave = new System.Windows.Forms.CheckBox();
-            this.btnOpenLog = new System.Windows.Forms.Button();
+            this.saveFileName = new System.Windows.Forms.Label();
             this.PortSet.SuspendLayout();
             this.gr.SuspendLayout();
             this.SuspendLayout();
@@ -218,16 +215,6 @@
             this.btnOpenUart.UseVisualStyleBackColor = true;
             this.btnOpenUart.Click += new System.EventHandler(this.btnOpenUart_Click);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.label7.Location = new System.Drawing.Point(0, 540);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(55, 15);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "label7";
-            // 
             // dsAssic
             // 
             this.dsAssic.AutoSize = true;
@@ -300,15 +287,19 @@
             this.checkBoxAutoSave.UseVisualStyleBackColor = true;
             this.checkBoxAutoSave.CheckedChanged += new System.EventHandler(this.checkBoxAutoSave_CheckedChanged);
             // 
-            // btnOpenLog
+            // saveFileName
             // 
-            this.btnOpenLog.Location = new System.Drawing.Point(124, 409);
-            this.btnOpenLog.Name = "btnOpenLog";
-            this.btnOpenLog.Size = new System.Drawing.Size(78, 34);
-            this.btnOpenLog.TabIndex = 10;
-            this.btnOpenLog.Text = "打开log";
-            this.btnOpenLog.UseVisualStyleBackColor = true;
-            this.btnOpenLog.Click += new System.EventHandler(this.btnOpenLog_Click);
+            this.saveFileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.saveFileName.AutoSize = true;
+            this.saveFileName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.saveFileName.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.saveFileName.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.saveFileName.Location = new System.Drawing.Point(12, 524);
+            this.saveFileName.Name = "saveFileName";
+            this.saveFileName.Size = new System.Drawing.Size(91, 22);
+            this.saveFileName.TabIndex = 11;
+            this.saveFileName.Text = "savefile";
+            this.saveFileName.Click += new System.EventHandler(this.saveFileName_Click);
             // 
             // Form1
             // 
@@ -316,12 +307,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 555);
-            this.Controls.Add(this.btnOpenLog);
+            this.Controls.Add(this.saveFileName);
             this.Controls.Add(this.dsRecvData);
             this.Controls.Add(this.checkBoxAutoSave);
             this.Controls.Add(this.checkBoxSelectTimestamp);
             this.Controls.Add(this.gr);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.btnOpenUart);
             this.Controls.Add(this.PortSet);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -352,15 +342,13 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnOpenUart;
-        private System.IO.Ports.SerialPort SerialPort;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.RadioButton dsAssic;
         private System.Windows.Forms.RadioButton dsHex;
         private System.Windows.Forms.GroupBox gr;
         private System.Windows.Forms.CheckBox checkBoxSelectTimestamp;
         private System.Windows.Forms.TextBox dsRecvData;
         private System.Windows.Forms.CheckBox checkBoxAutoSave;
-        private System.Windows.Forms.Button btnOpenLog;
+        private System.Windows.Forms.Label saveFileName;
     }
 }
 
