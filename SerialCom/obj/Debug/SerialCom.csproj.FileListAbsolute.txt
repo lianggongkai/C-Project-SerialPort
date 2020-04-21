@@ -24,3 +24,5 @@ K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csprojRe
 K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Form1.resources
 K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Properties.Resources.resources
 K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.SetOption.resources
+K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.SetOptLog.resources

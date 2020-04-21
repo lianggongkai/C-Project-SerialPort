@@ -49,8 +49,14 @@
             this.dsRecvData = new System.Windows.Forms.TextBox();
             this.checkBoxAutoSave = new System.Windows.Forms.CheckBox();
             this.saveFileName = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.工具ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.设置ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.参数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PortSet.SuspendLayout();
             this.gr.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PortSet
@@ -69,7 +75,7 @@
             this.PortSet.Controls.Add(this.dsBaudrate);
             this.PortSet.Controls.Add(this.dsPortName);
             this.PortSet.Font = new System.Drawing.Font("Microsoft YaHei", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.PortSet.Location = new System.Drawing.Point(29, 24);
+            this.PortSet.Location = new System.Drawing.Point(24, 42);
             this.PortSet.Name = "PortSet";
             this.PortSet.Size = new System.Drawing.Size(194, 241);
             this.PortSet.TabIndex = 0;
@@ -207,7 +213,7 @@
             // btnOpenUart
             // 
             this.btnOpenUart.Font = new System.Drawing.Font("Microsoft YaHei", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnOpenUart.Location = new System.Drawing.Point(29, 271);
+            this.btnOpenUart.Location = new System.Drawing.Point(24, 289);
             this.btnOpenUart.Name = "btnOpenUart";
             this.btnOpenUart.Size = new System.Drawing.Size(194, 44);
             this.btnOpenUart.TabIndex = 2;
@@ -241,7 +247,7 @@
             // 
             this.gr.Controls.Add(this.dsAssic);
             this.gr.Controls.Add(this.dsHex);
-            this.gr.Location = new System.Drawing.Point(31, 326);
+            this.gr.Location = new System.Drawing.Point(26, 344);
             this.gr.Name = "gr";
             this.gr.Size = new System.Drawing.Size(157, 42);
             this.gr.TabIndex = 7;
@@ -253,7 +259,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxSelectTimestamp.AutoSize = true;
-            this.checkBoxSelectTimestamp.Location = new System.Drawing.Point(44, 384);
+            this.checkBoxSelectTimestamp.Location = new System.Drawing.Point(39, 402);
             this.checkBoxSelectTimestamp.Name = "checkBoxSelectTimestamp";
             this.checkBoxSelectTimestamp.Size = new System.Drawing.Size(74, 19);
             this.checkBoxSelectTimestamp.TabIndex = 8;
@@ -265,7 +271,7 @@
             this.dsRecvData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dsRecvData.Location = new System.Drawing.Point(247, 38);
+            this.dsRecvData.Location = new System.Drawing.Point(242, 56);
             this.dsRecvData.Multiline = true;
             this.dsRecvData.Name = "dsRecvData";
             this.dsRecvData.ReadOnly = true;
@@ -279,7 +285,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxAutoSave.AutoSize = true;
-            this.checkBoxAutoSave.Location = new System.Drawing.Point(124, 384);
+            this.checkBoxAutoSave.Location = new System.Drawing.Point(119, 402);
             this.checkBoxAutoSave.Name = "checkBoxAutoSave";
             this.checkBoxAutoSave.Size = new System.Drawing.Size(83, 19);
             this.checkBoxAutoSave.TabIndex = 8;
@@ -301,6 +307,46 @@
             this.saveFileName.Text = "savefile";
             this.saveFileName.Click += new System.EventHandler(this.saveFileName_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.设置ToolStripMenuItem,
+            this.工具ToolStripMenuItem,
+            this.设置ToolStripMenuItem1});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(882, 28);
+            this.menuStrip1.TabIndex = 12;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 设置ToolStripMenuItem
+            // 
+            this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
+            this.设置ToolStripMenuItem.Text = "文件";
+            // 
+            // 工具ToolStripMenuItem
+            // 
+            this.工具ToolStripMenuItem.Name = "工具ToolStripMenuItem";
+            this.工具ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
+            this.工具ToolStripMenuItem.Text = "工具";
+            // 
+            // 设置ToolStripMenuItem1
+            // 
+            this.设置ToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.参数ToolStripMenuItem});
+            this.设置ToolStripMenuItem1.Name = "设置ToolStripMenuItem1";
+            this.设置ToolStripMenuItem1.Size = new System.Drawing.Size(51, 24);
+            this.设置ToolStripMenuItem1.Text = "设置";
+            // 
+            // 参数ToolStripMenuItem
+            // 
+            this.参数ToolStripMenuItem.Name = "参数ToolStripMenuItem";
+            this.参数ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.参数ToolStripMenuItem.Text = "选项";
+            this.参数ToolStripMenuItem.Click += new System.EventHandler(this.参数ToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -314,7 +360,9 @@
             this.Controls.Add(this.gr);
             this.Controls.Add(this.btnOpenUart);
             this.Controls.Add(this.PortSet);
+            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "串口工具";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -322,6 +370,8 @@
             this.PortSet.PerformLayout();
             this.gr.ResumeLayout(false);
             this.gr.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,6 +399,11 @@
         private System.Windows.Forms.TextBox dsRecvData;
         private System.Windows.Forms.CheckBox checkBoxAutoSave;
         private System.Windows.Forms.Label saveFileName;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 工具ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem 参数ToolStripMenuItem;
     }
 }
 

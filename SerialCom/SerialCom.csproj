@@ -59,8 +59,18 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialExt.cs">
-      <SubType>Component</SubType>
+    <Compile Include="SerialExt.cs" />
+    <Compile Include="SetOption.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetOption.Designer.cs">
+      <DependentUpon>SetOption.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SetOptLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetOptLog.Designer.cs">
+      <DependentUpon>SetOptLog.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -75,6 +85,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SetOption.resx">
+      <DependentUpon>SetOption.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetOptLog.resx">
+      <DependentUpon>SetOptLog.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -89,6 +105,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="icon\文件.png" />
+    <None Include="icon\文件blue.png" />
     <Content Include="tool.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

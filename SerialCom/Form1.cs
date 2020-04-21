@@ -11,9 +11,11 @@ using System.IO.Ports;
 using System.IO;
 using System.Diagnostics;
 using SerialExt;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SerialCom
 {
+    public delegate void FuncUart(string m);
     public partial class Form1 : Form
     {
         public Form1()
@@ -24,7 +26,10 @@ namespace SerialCom
         ~Form1()
         {
             CloseSerialPort();
+            com.ClosePort();
+            base.Dispose();
         }
+    
         private void FormInit()
         {
             String[] portname;
@@ -37,42 +42,61 @@ namespace SerialCom
             saveFileName.Text = "no file";
             UartExtConfig();
         }
+        private void StartUIAsyncHandle(string data)
+        {
+            try
+            {
+                InvokeRes = BeginInvoke((EventHandler)(delegate {
+                    DispUartData(data);
+                    SaveUartData(data);
+                }));
+            } catch (Exception ex) {
+                throw (ex);
+            }
+        }
+        private void StopUIAsyncHandle(string data)
+        {
+            //if (InvokeRes != null)
+                EndInvoke(InvokeRes);
+        }
+        private void CheckConfigFile(string file)
+        {
+            string path = Directory.GetCurrentDirectory();
+            path += "\\" + file;
+            if (File.Exists(path))
+            {
+                this.DeserizeConfig(file, sp, logOpt);
+            } else
+            {
+                DefaultLogOptInit();
+                this.SerialConfig(file, sp, logOpt);
+            }
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             FormInit();
             btnColor = btnOpenUart.BackColor;
-            //label7.Text = "No port open";
             checkBoxSelectTimestamp.Checked = true;
             dsAssic.Checked = true;
             dsHex.Checked = false;
-            if (portState == false)
-            {
-                btnOpenUart.BackColor = btnColor;
-                btnOpenUart.Text = "打开串口";
-                btnOpenUart.ForeColor = System.Drawing.Color.Black;
-            } else
-            {
-                btnOpenUart.BackColor = System.Drawing.Color.Cyan;
-                btnOpenUart.Text = "关闭串口";
-                btnOpenUart.ForeColor = System.Drawing.Color.White;
-            }
+            CheckConfigFile("serial.dat");
+            checkBoxAutoSave.Checked = logOpt.logSaveChecked;
+            log.Path = logOpt.logPath;
+            log.Name = logOpt.logName;//log.GetLogName();
+            log.SaveEnable = logOpt.logSaveChecked;
         }
 
         public bool UpdateSerialPortParameter(string portName, int boudRate = 115200, int dataBit = 8, 
             int stopBit = 1, int timeOut = 5000)
         {
-            if (portName == string.Empty)
-            {
-                return false;
-            }
-            try
-            {
-                sp.PortName = portName;
-                sp.BaudRate = boudRate;
-                sp.DataBits = dataBit;
-                sp.StopBits = (StopBits)stopBit;
-                sp.ReadTimeout = timeOut;
-                sp.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
+            if (portName == string.Empty) return false;
+            sp.PortName = portName;
+            sp.BaudRate = boudRate;
+            sp.DataBits = dataBit;
+            sp.StopBits = (StopBits)stopBit;
+            sp.ReadTimeout = timeOut;
+            sp.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
+            try {
                 sp.Open();
                 if (sp.IsOpen) return true;
             } catch(Exception e) {
@@ -84,18 +108,12 @@ namespace SerialCom
 
         private void CloseSerialPort()
         {
-            isClosing = true;
+            StopUIAsyncHandle("");
             sp.DataReceived -= SerialPort_DataReceived;
-            try
-            {
-                /*while (serialBusy)
-                {
-                    Application.DoEvents();
-                }*/
+            try {
                 sp.Close();
-            }
-            catch(Exception e)
-            {
+                sp.Dispose();
+            } catch(Exception e) {
                 throw e;
             }
         }
@@ -147,9 +165,9 @@ namespace SerialCom
         }
         private void UartExtConfig()
         {
-            com.autoSave = true;
+            //com.autoSave = checkBoxAutoSave.Checked;
             com.savePath = System.IO.Directory.GetCurrentDirectory() + @"\SerialLog";
-            com.saveName = DateTime.Now.ToString("yy-MM-dd_HH-mm");
+            com.saveName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
             if (Directory.Exists(com.savePath) == false)
             {
                 try {
@@ -164,29 +182,29 @@ namespace SerialCom
         {
             OpenOrCloseSerial();
         }
+        private void btnChangeOpenUartUI()
+        {
+            btnOpenUart.BackColor = System.Drawing.Color.FromArgb(0, 128, 255);
+            btnOpenUart.Text = "关闭串口";
+            btnOpenUart.ForeColor = System.Drawing.Color.White;
+        }
+        private void btnChangeCloseUartUI()
+        {
+            btnOpenUart.BackColor = btnColor;
+            btnOpenUart.ForeColor = System.Drawing.Color.Black;
+            btnOpenUart.Text = "打开串口";
+        }
         private void OpenOrCloseSerial()
         {
-            //label7.Text = dsPortName.Text + " " + dsBaudrate.Text + " " + dsDataBit.Text + " " 
-             //   + dsStopBit.Text + " " + dsParity.Text;
-            if (dsPortName.Text == string.Empty)
-            {
+            if (dsPortName.Text == string.Empty) {
                 MessageBox.Show("请选择串口！");
                 return;
             }
-            if (portState == false)
-            {
-                //label7.Text = dsPortName.Text + " " + dsBaudrate.Text + " " + dsDataBit.Text + " "
-                //+ dsStopBit.Text + " " + dsParity.Text;
-                try
-                {
+            if (sp.IsOpen == false) {
+                try {
                     if (UpdateSerialPortParameter(dsPortName.Text, int.Parse(dsBaudrate.Text),
-                    int.Parse(dsDataBit.Text), int.Parse(dsStopBit.Text)) == true)
-                    {
-                        portState = true;
-                        btnOpenUart.BackColor = System.Drawing.Color.FromArgb(0, 128, 255);
-                        btnOpenUart.Text = "关闭串口";
-                        btnOpenUart.ForeColor = System.Drawing.Color.White;
-                        isClosing = false;
+                        int.Parse(dsDataBit.Text), int.Parse(dsStopBit.Text)) == true) {
+                        btnChangeOpenUartUI();
                     } else {
                         MessageBox.Show("串口打开失败");
                     }
@@ -194,49 +212,24 @@ namespace SerialCom
                     MessageBox.Show(e.Message);
                 }
             } else {
-                //label7.Text = "Port Closed";
                 CloseSerialPort();
-                portState = false;
-                btnOpenUart.BackColor = btnColor;
-                btnOpenUart.ForeColor = System.Drawing.Color.Black;
-                btnOpenUart.Text = "打开串口";
+                btnChangeCloseUartUI();
             }
-        }
-
-        
-
-        private string UartDataToSting(byte[] data)
-        {
-            string val = "";
-            if (data != null)
-            {
-                val = EncodingType.GetString(data, 0, data.Length);
-            }
-            return val;
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            if (isClosing == true)
-            {
-                serialBusy = false;
-                return;
-            }
-            serialBusy = true;
             bool isRowComplete = false;
             try {
                 byte[] tmp = new byte[sp.BytesToRead+10];
                 int cnt = sp.Read(tmp, 0, tmp.Length);
-                if (cnt == 0) goto exit;
-                foreach (var item in tmp)
-                {
-                    if (item == 0x0d)
-                    {
+                if (cnt == 0) return;
+                foreach (var item in tmp) {
+                    if (item == 0x0d) {
                         isRowComplete = true;
                     }
                 }
-                if (cnt + rcvRowBytes <= buffer.Length)
-                {
+                if (cnt + rcvRowBytes <= buffer.Length) {
                     tmp.CopyTo(buffer, rcvRowBytes);
                 }
 
@@ -245,16 +238,13 @@ namespace SerialCom
                 if (isRowComplete)
                 {
                     string str = "";
-                    if (dsAssic.Checked == true)
-                    {
-                        EncodingType = Encoding.ASCII;
-                        str = EncodingType.GetString(buffer, 0, rcvRowBytes);
-                    }
-                    else
-                    {
+                    if (dsAssic.Checked == true) {
+                        sp.Encoding = Encoding.ASCII;
+                        str = sp.Encoding.GetString(buffer, 0, rcvRowBytes);
+                        //str = EncodingType.GetString(buffer, 0, rcvRowBytes);
+                    } else {
                         int i = 0;
-                        foreach (var item1 in buffer)
-                        {
+                        foreach (var item1 in buffer) {
                             if (i++ >= rcvRowBytes) break;
                             str += item1.ToString("X2") + " ";
                         }
@@ -262,15 +252,11 @@ namespace SerialCom
                     }
                     string time = "";
                     string disp = "";
-                    if (checkBoxSelectTimestamp.Checked)
-                    {
+                    if (checkBoxSelectTimestamp.Checked) {
                         time = $"[{DateTime.Now.ToString("HH:mm:ss.fff")}]: ";
                     }
                     disp = time + str;
-                    BeginInvoke((EventHandler)(delegate { 
-                        DispUartData(disp);
-                        SaveUartData(disp);
-                    }));
+                    StartUIAsyncHandle(disp);
                     rcvRowBytes = 0;
                     Array.Clear(buffer, 0, buffer.Length);
                 }
@@ -279,9 +265,6 @@ namespace SerialCom
                 MessageBox.Show(disp);
                 throw ex;
             }
- exit:
-            serialBusy = false;
-            isClosing = false;
         }
 
         private void dsPortName_DragDrop(object sender, DragEventArgs e)
@@ -290,89 +273,132 @@ namespace SerialCom
             dsPortName.DataSource = ports;
         }
 
-        private void btnOpenLog_Click(object sender, EventArgs e)
-        {
-            com.autoSave = true;
-            //com.savePath = @"K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom";
-            //com.savePath = System.IO.Directory.GetCurrentDirectory();
-            
-            OpenFileDialog a = new OpenFileDialog();
-            a.InitialDirectory = com.savePath;
-            
-            if (a.ShowDialog() == DialogResult.OK)
-            {
-                Process.Start(@"C:\Program Files\Notepad++\notepad++.exe", a.FileName);
-            }
-        }
         private void DispUartData(string Data)
         {
+            if (dsRecvData.TextLength > 256 * 1024) dsRecvData.Text = "";
             dsRecvData.AppendText(Data);
-            //dsRecvData.SelectionStart = dsRecvData.Text.Length;
-            //dsRecvData.ScrollToCaret();
         }
+        
         private void SaveUartData(string data)
-        {
-            
-            if (checkBoxAutoSave.Checked)
-            {
-                try
-                {
-                    StreamWriter writer = new StreamWriter(com.savePath + "\\" + com.PortName + "-" + com.saveName + ".txt", true, Encoding.ASCII);
-                    if (writer != null)
-                    {
+        {  
+            if (checkBoxAutoSave.Checked) {
+                log.Log(data);
+                /*try {
+                    StreamWriter writer = new StreamWriter(log.Path + "\\" + com.PortName + "-" + com.saveName + ".txt",
+                        true, Encoding.ASCII);
+                    if (writer != null) {
                         writer.Write(data);
                         writer.Flush();
                         writer.Close();
-                    } else
-                    {
+                    } else {
                         Exception ex = new Exception("write file failed");
                         throw (ex);
                     }
-                } catch (Exception ex)
-                { 
+                } catch (Exception ex) { 
                     throw (ex);
-                }
-                
+                } */ 
             }
         }
-
+        private SelfLog log = new SelfLog();
         private void checkBoxAutoSave_CheckedChanged(object sender, EventArgs e)
         {
             UartExtConfig();
-            if (checkBoxAutoSave.Checked)
-            {
-                saveFileName.Text = com.savePath + "\\" + com.PortName + "-" + com.saveName + ".txt";
-            } else
-            {
+            if (checkBoxAutoSave.Checked) {
+                //saveFileName.Text = com.savePath + "\\" + com.PortName + "-" + com.saveName + ".txt";
+                logOpt.logSaveChecked = true;
+                log.SaveEnable = logOpt.logSaveChecked;
+                log.Path = logOpt.logPath;
+                log.Name = logOpt.logName;
+                log.tsNameEnable = true;
+                saveFileName.Text = log.Path + "\\" + log.GetLogName();
+                
+            } else {
                 saveFileName.Text = "Click to open log file";
             }
-           
         }
 
         private void saveFileName_Click(object sender, EventArgs e)
         {
-            com.autoSave = true;
-            //com.savePath = @"K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom";
-            //com.savePath = System.IO.Directory.GetCurrentDirectory();
-
             OpenFileDialog a = new OpenFileDialog();
-            a.InitialDirectory = com.savePath;
-
-            if (a.ShowDialog() == DialogResult.OK)
-            {
+            //a.InitialDirectory = com.savePath;
+            a.InitialDirectory = log.Path;
+            if (a.ShowDialog() == DialogResult.OK) {
                 Process.Start(@"C:\Program Files\Notepad++\notepad++.exe", a.FileName);
             }
         }
-        public Encoding EncodingType { get; set; } = Encoding.ASCII;
-        private Boolean portState = false;
-        private Boolean serialBusy = false;
-        private Boolean isClosing = false;
+ 
         private SerialPort sp;
         private Color btnColor;
         private byte[] buffer = new byte[1024];
         private UInt32 rcvBytes;
         private int rcvRowBytes;
         private SelfdefSerial com = new SelfdefSerial();
-        private string saveFileFullPath;
+        private IAsyncResult InvokeRes;
+        private LogOptionParam logOpt = new LogOptionParam();
+        private void DefaultLogOptInit()
+        {
+            logOpt.logMaxSize = 256;
+            logOpt.logName = "SerialCom";
+            logOpt.logPath = Directory.GetCurrentDirectory();
+            logOpt.logSaveChecked = false;
+        }
+
+        private void SerialConfig(string path, SerialPort sp, LogOptionParam log)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                //bf.Serialize(fs, sp);
+                bf.Serialize(fs, log);
+                fs.Flush();
+                fs.Close();
+            }
+        }
+        private bool DeserizeConfig(string path, SerialPort sp, LogOptionParam log)
+        {
+            bool res = true; 
+            BinaryFormatter bf = new BinaryFormatter();
+            try { 
+                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read))
+                {
+                    //sp = bf.Deserialize(fs) as SerialPort;
+                    var ss = bf.Deserialize(fs);
+                    if (ss != null)
+                    {
+                        logOpt = (LogOptionParam)(ss);
+                    }
+                    fs.Close();
+                    return res;
+                }
+                
+            } catch (Exception ex) {
+                res = false;
+            }
+            return res;
+        }
+
+        private void 参数ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.DeserizeConfig("serial.dat", sp, logOpt) == false)
+            {
+                this.DefaultLogOptInit();
+            }
+            SetOption optDialog = new SetOption();
+            optDialog.StartPosition = FormStartPosition.CenterParent;
+            optDialog.SetOptLogParam(logOpt);
+            if (optDialog.ShowDialog() == DialogResult.OK)
+            {
+                logOpt = optDialog.GetOptLogParam();
+                this.SerialConfig("serial.dat", sp, logOpt);
+                checkBoxAutoSave.Checked = logOpt.logSaveChecked;
+                log.Path = logOpt.logPath;
+                log.Name = logOpt.logName;
+                log.SaveEnable = logOpt.logSaveChecked;
+                if (checkBoxAutoSave.Checked)
+                {
+                    saveFileName.Text = log.Path + "\\" + log.GetLogName();
+                }
+            }
+        }
     }
 }
