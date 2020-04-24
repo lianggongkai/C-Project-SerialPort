@@ -34,6 +34,9 @@
             this.textBox_logSize = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.open = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox_exeLog = new System.Windows.Forms.TextBox();
+            this.btnExeLog = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox_logName
@@ -105,15 +108,45 @@
             this.open.UseVisualStyleBackColor = true;
             this.open.Click += new System.EventHandler(this.open_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(24, 176);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(75, 15);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "默认调用:";
+            // 
+            // textBox_exeLog
+            // 
+            this.textBox_exeLog.Location = new System.Drawing.Point(105, 173);
+            this.textBox_exeLog.Name = "textBox_exeLog";
+            this.textBox_exeLog.Size = new System.Drawing.Size(378, 25);
+            this.textBox_exeLog.TabIndex = 0;
+            // 
+            // btnExeLog
+            // 
+            this.btnExeLog.BackgroundImage = global::SerialCom.Properties.Resources.文件blue;
+            this.btnExeLog.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExeLog.Location = new System.Drawing.Point(489, 166);
+            this.btnExeLog.Name = "btnExeLog";
+            this.btnExeLog.Size = new System.Drawing.Size(37, 35);
+            this.btnExeLog.TabIndex = 3;
+            this.btnExeLog.UseVisualStyleBackColor = true;
+            this.btnExeLog.Click += new System.EventHandler(this.btnExeLog_Click);
+            // 
             // SetOptLog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(550, 350);
+            this.Controls.Add(this.btnExeLog);
             this.Controls.Add(this.open);
             this.Controls.Add(this.checkBox_optCheckSave);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBox_exeLog);
             this.Controls.Add(this.textBox_logSize);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox_logPath);
@@ -136,5 +169,8 @@
         private System.Windows.Forms.TextBox textBox_logSize;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button open;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox_exeLog;
+        private System.Windows.Forms.Button btnExeLog;
     }
 }

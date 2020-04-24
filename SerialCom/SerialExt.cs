@@ -15,6 +15,7 @@ namespace SerialExt {
         private string Timestamp;               /* log name timestamp */
         public bool SaveEnable { set; get; }    /* save log enable */
         public bool tsNameEnable { set; get; }  /* log file name add timestamp enable */
+        public string ExeLog { set; get; }      /* excute open log program */
         private UInt32 maxSize = 256;           /* log max size, unit:(MB)*/
         private UInt16 sameCnt;
         
@@ -22,7 +23,14 @@ namespace SerialExt {
         {
             if (System.IO.Directory.Exists(Path) == false)
             {
-                System.IO.Directory.CreateDirectory(Path);
+                try
+                {
+                    System.IO.Directory.CreateDirectory(Path);
+                } catch (Exception ex)
+                {
+                    Path = Directory.GetCurrentDirectory();
+                    //throw ex;
+                }
             }
         }
        
@@ -32,6 +40,7 @@ namespace SerialExt {
             Name = "SerialLog";
             SaveEnable = false;
             tsNameEnable = true;
+            ExeLog = "";
             sameCnt = 0;
         }
         public void SetFileName(string filename)
@@ -46,18 +55,18 @@ namespace SerialExt {
         /* when open save log action excute this */
         public void UpdateNameTimestamp()
         {
-            if (this.tsNameEnable)
+            this.Timestamp = "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            /*if (this.tsNameEnable)
             {
                 this.Timestamp = "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
             } else {
-                sameCnt++;
                 this.Timestamp = "_" + sameCnt.ToString("#000");
-            }
+            } */
             CheckLogPath();
         }
         public string GetLogName()
         {
-            UpdateNameTimestamp();
+            //UpdateNameTimestamp();
             return this.Name + this.Timestamp + ".txt";
         }
         /* record log string to file */
@@ -69,6 +78,10 @@ namespace SerialExt {
             {
                 string file = GetLogName();
                 string filename = this.Path + @"\" + file;
+                if (File.Exists(filename) != false)
+                {
+
+                }
                 StreamWriter writer = new StreamWriter(filename, true, Encoding.ASCII);
                 FileInfo fileinfo = new FileInfo(filename);
                 if (fileinfo.Length / (1024*1024) >= this.maxSize)

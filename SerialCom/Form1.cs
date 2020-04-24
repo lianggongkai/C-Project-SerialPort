@@ -28,6 +28,8 @@ namespace SerialCom
             CloseSerialPort();
             com.ClosePort();
             base.Dispose();
+            logOpt.logSaveChecked = false;
+            SerialConfig("serial.dat", sp, logOpt);
         }
     
         private void FormInit()
@@ -39,8 +41,8 @@ namespace SerialCom
             dsDataBit.SelectedIndex = 0;
             dsParity.SelectedIndex = 0;
             dsStopBit.SelectedIndex = 1;
-            saveFileName.Text = "no file";
-            UartExtConfig();
+            quikOpenLog.Text = "no file";
+            //UartExtConfig();
         }
         private void StartUIAsyncHandle(string data)
         {
@@ -56,17 +58,16 @@ namespace SerialCom
         }
         private void StopUIAsyncHandle(string data)
         {
-            //if (InvokeRes != null)
+            if (InvokeRes != null)
                 EndInvoke(InvokeRes);
         }
         private void CheckConfigFile(string file)
         {
             string path = Directory.GetCurrentDirectory();
             path += "\\" + file;
-            if (File.Exists(path))
-            {
-                this.DeserizeConfig(file, sp, logOpt);
-            } else
+            bool res1 = File.Exists(path);
+            bool res2 = DeserizeConfig(file, sp, logOpt);
+            if ((File.Exists(path) != true) || (DeserizeConfig(file, sp, logOpt) != true))
             {
                 DefaultLogOptInit();
                 this.SerialConfig(file, sp, logOpt);
@@ -80,10 +81,12 @@ namespace SerialCom
             dsAssic.Checked = true;
             dsHex.Checked = false;
             CheckConfigFile("serial.dat");
+            logOpt.logSaveChecked = false;
             checkBoxAutoSave.Checked = logOpt.logSaveChecked;
             log.Path = logOpt.logPath;
             log.Name = logOpt.logName;//log.GetLogName();
             log.SaveEnable = logOpt.logSaveChecked;
+            log.ExeLog = logOpt.logExe;
         }
 
         public bool UpdateSerialPortParameter(string portName, int boudRate = 115200, int dataBit = 8, 
@@ -263,7 +266,7 @@ namespace SerialCom
             } catch(Exception ex) {
                 string disp = ex.GetType().Name + ", " + ex.Message;
                 MessageBox.Show(disp);
-                throw ex;
+                //throw ex;
             }
         }
 
@@ -281,55 +284,39 @@ namespace SerialCom
         
         private void SaveUartData(string data)
         {  
-            if (checkBoxAutoSave.Checked) {
-                log.Log(data);
-                /*try {
-                    StreamWriter writer = new StreamWriter(log.Path + "\\" + com.PortName + "-" + com.saveName + ".txt",
-                        true, Encoding.ASCII);
-                    if (writer != null) {
-                        writer.Write(data);
-                        writer.Flush();
-                        writer.Close();
-                    } else {
-                        Exception ex = new Exception("write file failed");
-                        throw (ex);
-                    }
-                } catch (Exception ex) { 
-                    throw (ex);
-                } */ 
-            }
+            if (checkBoxAutoSave.Checked) log.Log(data);
         }
         private SelfLog log = new SelfLog();
         private void checkBoxAutoSave_CheckedChanged(object sender, EventArgs e)
         {
-            UartExtConfig();
+            //UartExtConfig();
+            logOpt.logSaveChecked = checkBoxAutoSave.Checked;
+            log.SaveEnable = logOpt.logSaveChecked;
             if (checkBoxAutoSave.Checked) {
                 //saveFileName.Text = com.savePath + "\\" + com.PortName + "-" + com.saveName + ".txt";
-                logOpt.logSaveChecked = true;
-                log.SaveEnable = logOpt.logSaveChecked;
                 log.Path = logOpt.logPath;
                 log.Name = logOpt.logName;
-                log.tsNameEnable = true;
-                saveFileName.Text = log.Path + "\\" + log.GetLogName();
+                log.UpdateNameTimestamp();
+                quikOpenLog.Text = log.Path + "\\" + log.GetLogName();
                 
             } else {
-                saveFileName.Text = "Click to open log file";
+                quikOpenLog.Text = "Click to open log file";
+            }
+            SerialConfig("serial.dat", sp, logOpt);
+        }
+
+        private void quickOpenLog_Click(object sender, EventArgs e) {
+            OpenFileDialog a = new OpenFileDialog();
+            a.InitialDirectory = log.Path;
+            if (a.ShowDialog() == DialogResult.OK)
+            {
+                Process.Start(log.ExeLog, a.FileName);
             }
         }
 
-        private void saveFileName_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog a = new OpenFileDialog();
-            //a.InitialDirectory = com.savePath;
-            a.InitialDirectory = log.Path;
-            if (a.ShowDialog() == DialogResult.OK) {
-                Process.Start(@"C:\Program Files\Notepad++\notepad++.exe", a.FileName);
-            }
-        }
- 
         private SerialPort sp;
         private Color btnColor;
-        private byte[] buffer = new byte[1024];
+        private byte[] buffer = new byte[4096];
         private UInt32 rcvBytes;
         private int rcvRowBytes;
         private SelfdefSerial com = new SelfdefSerial();
@@ -341,6 +328,7 @@ namespace SerialCom
             logOpt.logName = "SerialCom";
             logOpt.logPath = Directory.GetCurrentDirectory();
             logOpt.logSaveChecked = false;
+            logOpt.logExe = "notepad.exe";
         }
 
         private void SerialConfig(string path, SerialPort sp, LogOptionParam log)
@@ -368,12 +356,14 @@ namespace SerialCom
                         logOpt = (LogOptionParam)(ss);
                     }
                     fs.Close();
-                    return res;
+                    //return res;
                 }
                 
             } catch (Exception ex) {
                 res = false;
             }
+            /* check log path */
+            res = Directory.Exists(logOpt.logPath);
             return res;
         }
 
@@ -389,14 +379,16 @@ namespace SerialCom
             if (optDialog.ShowDialog() == DialogResult.OK)
             {
                 logOpt = optDialog.GetOptLogParam();
-                this.SerialConfig("serial.dat", sp, logOpt);
+                SerialConfig("serial.dat", sp, logOpt);
                 checkBoxAutoSave.Checked = logOpt.logSaveChecked;
                 log.Path = logOpt.logPath;
                 log.Name = logOpt.logName;
                 log.SaveEnable = logOpt.logSaveChecked;
+                log.ExeLog = logOpt.logExe;
                 if (checkBoxAutoSave.Checked)
                 {
-                    saveFileName.Text = log.Path + "\\" + log.GetLogName();
+                    log.UpdateNameTimestamp();
+                    quikOpenLog.Text = log.Path + "\\" + log.GetLogName();
                 }
             }
         }

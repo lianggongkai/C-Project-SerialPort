@@ -26,3 +26,13 @@ K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Properti
 K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
 K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.SetOption.resources
 K:\BaiduNetdiskDownload\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.SetOptLog.resources
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.exe.config
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.exe
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.pdb
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Form1.resources
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Properties.Resources.resources
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.SetOption.resources
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.SetOptLog.resources
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.exe
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.pdb

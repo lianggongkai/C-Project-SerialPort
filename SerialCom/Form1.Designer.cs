@@ -48,7 +48,7 @@
             this.checkBoxSelectTimestamp = new System.Windows.Forms.CheckBox();
             this.dsRecvData = new System.Windows.Forms.TextBox();
             this.checkBoxAutoSave = new System.Windows.Forms.CheckBox();
-            this.saveFileName = new System.Windows.Forms.Label();
+            this.quikOpenLog = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -293,19 +293,19 @@
             this.checkBoxAutoSave.UseVisualStyleBackColor = true;
             this.checkBoxAutoSave.CheckedChanged += new System.EventHandler(this.checkBoxAutoSave_CheckedChanged);
             // 
-            // saveFileName
+            // quikOpenLog
             // 
-            this.saveFileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveFileName.AutoSize = true;
-            this.saveFileName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.saveFileName.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.saveFileName.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.saveFileName.Location = new System.Drawing.Point(12, 524);
-            this.saveFileName.Name = "saveFileName";
-            this.saveFileName.Size = new System.Drawing.Size(91, 22);
-            this.saveFileName.TabIndex = 11;
-            this.saveFileName.Text = "savefile";
-            this.saveFileName.Click += new System.EventHandler(this.saveFileName_Click);
+            this.quikOpenLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.quikOpenLog.AutoSize = true;
+            this.quikOpenLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.quikOpenLog.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.quikOpenLog.Font = new System.Drawing.Font("SimSun", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.quikOpenLog.Location = new System.Drawing.Point(12, 524);
+            this.quikOpenLog.Name = "quikOpenLog";
+            this.quikOpenLog.Size = new System.Drawing.Size(131, 22);
+            this.quikOpenLog.TabIndex = 11;
+            this.quikOpenLog.Text = "quickOpenLog";
+            this.quikOpenLog.Click += new System.EventHandler(this.quickOpenLog_Click);
             // 
             // menuStrip1
             // 
@@ -343,7 +343,7 @@
             // 参数ToolStripMenuItem
             // 
             this.参数ToolStripMenuItem.Name = "参数ToolStripMenuItem";
-            this.参数ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.参数ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.参数ToolStripMenuItem.Text = "选项";
             this.参数ToolStripMenuItem.Click += new System.EventHandler(this.参数ToolStripMenuItem_Click);
             // 
@@ -353,7 +353,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(882, 555);
-            this.Controls.Add(this.saveFileName);
+            this.Controls.Add(this.quikOpenLog);
             this.Controls.Add(this.dsRecvData);
             this.Controls.Add(this.checkBoxAutoSave);
             this.Controls.Add(this.checkBoxSelectTimestamp);
@@ -398,7 +398,7 @@
         private System.Windows.Forms.CheckBox checkBoxSelectTimestamp;
         private System.Windows.Forms.TextBox dsRecvData;
         private System.Windows.Forms.CheckBox checkBoxAutoSave;
-        private System.Windows.Forms.Label saveFileName;
+        private System.Windows.Forms.Label quikOpenLog;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 工具ToolStripMenuItem;
