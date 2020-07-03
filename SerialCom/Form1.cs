@@ -219,61 +219,49 @@ namespace SerialCom
                 btnChangeCloseUartUI();
             }
         }
-
+        private List<string> HandleSerialFrameData(byte[] recvData, string curTime, bool is_to_hex) {
+            List<string> res_list = new List<string>();
+            if (recvData == null) return null;
+            int linecnt = 0;
+            int offset = 0;
+            foreach(var item in recvData)
+            {
+                linecnt++;
+                if (item == 0x0a)
+                {
+                    string linestr = "";
+                    if (is_to_hex) {
+                        for (int i = 0; i < linecnt; i++)
+                        {
+                            linestr += recvData[offset + i].ToString("X2") + " ";
+                        }
+                        linestr += "\n";
+                    } else {
+                        linestr = sp.Encoding.GetString(recvData, offset, linecnt);
+                    }
+                    res_list.Add(curTime+linestr);
+                    offset += linecnt;
+                    linecnt = 0;
+                }
+            }
+            return res_list;
+        }
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            bool isRowComplete = false;
             try {
                 byte[] tmp = new byte[sp.BytesToRead+10];
                 int cnt = sp.Read(tmp, 0, tmp.Length);
                 if (cnt == 0) return;
-                foreach (var item in tmp) {
-                    if (item == 0x0d) {
-                        isRowComplete = true;
-                    }
-                }
-                if (cnt + rcvRowBytes <= buffer.Length) {
-                    tmp.CopyTo(buffer, rcvRowBytes);
-                }
-
-                rcvRowBytes += cnt;
-                rcvBytes += (UInt32)cnt;
-                if (isRowComplete)
+                List<string> list_str = HandleSerialFrameData(tmp, $"[{DateTime.Now.ToString("HH:mm:ss.fff")}]: ", dsAssic.Checked == false);
+                foreach (var item in list_str)
                 {
-                    string str = "";
-                    if (dsAssic.Checked == true) {
-                        sp.Encoding = Encoding.ASCII;
-                        str = sp.Encoding.GetString(buffer, 0, rcvRowBytes);
-                        //str = EncodingType.GetString(buffer, 0, rcvRowBytes);
-                    } else {
-                        int i = 0;
-                        foreach (var item1 in buffer) {
-                            if (i++ >= rcvRowBytes) break;
-                            str += item1.ToString("X2") + " ";
-                        }
-                        str += "\n";
-                    }
-                    string time = "";
-                    string disp = "";
-                    if (checkBoxSelectTimestamp.Checked) {
-                        time = $"[{DateTime.Now.ToString("HH:mm:ss.fff")}]: ";
-                    }
-                    disp = time + str;
-                    StartUIAsyncHandle(disp);
-                    rcvRowBytes = 0;
-                    Array.Clear(buffer, 0, buffer.Length);
+                    StartUIAsyncHandle(item);
                 }
             } catch(Exception ex) {
                 string disp = ex.GetType().Name + ", " + ex.Message;
                 MessageBox.Show(disp);
                 //throw ex;
             }
-        }
-
-        private void dsPortName_DragDrop(object sender, DragEventArgs e)
-        {
-            string[] ports = SerialPort.GetPortNames();
-            dsPortName.DataSource = ports;
         }
 
         private void DispUartData(string Data)
@@ -317,8 +305,8 @@ namespace SerialCom
         private SerialPort sp;
         private Color btnColor;
         private byte[] buffer = new byte[4096];
-        private UInt32 rcvBytes;
-        private int rcvRowBytes;
+        //private UInt32 rcvBytes;
+        //private int rcvRowBytes;
         private SelfdefSerial com = new SelfdefSerial();
         private IAsyncResult InvokeRes;
         private LogOptionParam logOpt = new LogOptionParam();
@@ -361,6 +349,7 @@ namespace SerialCom
                 
             } catch (Exception ex) {
                 res = false;
+                throw ex;
             }
             /* check log path */
             res = Directory.Exists(logOpt.logPath);

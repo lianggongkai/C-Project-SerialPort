@@ -26,10 +26,9 @@ namespace SerialExt {
                 try
                 {
                     System.IO.Directory.CreateDirectory(Path);
-                } catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     Path = Directory.GetCurrentDirectory();
-                    //throw ex;
+                    throw ex;
                 }
             }
         }

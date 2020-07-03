@@ -36,3 +36,4 @@ D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom
 D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
 D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.exe
 D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.pdb
+D:\lianggongke\参考资料\学习\C-sharp-excercise\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csprojResolveAssemblyReference.cache
