@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -66,5 +67,38 @@ namespace SerialCom {
         public bool logSaveChecked { set; get; }
         public UInt32 logMaxSize { set; get; }
         public string logExe { set; get; } 
+
+        public void Serialize(string path) {
+            BinaryFormatter bf = new BinaryFormatter();
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                bf.Serialize(fs, this);
+                fs.Flush();
+                fs.Close();
+            }
+        }
+        public void DefaultInit() {
+            this.logMaxSize = 256;
+            this.logName = "SerialCom";
+            this.logPath = Directory.GetCurrentDirectory();
+            this.logSaveChecked = false;
+            this.logExe = "notepad.exe";
+        }
+
+        public static LogOptionParam Deserialize(string path) {
+            var DeserializeObj = new LogOptionParam();
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read))
+                {
+                    DeserializeObj = (LogOptionParam)bf.Deserialize(fs);
+                    fs.Close();
+                }
+            } catch (Exception ex) {
+                throw ex;
+            }
+            return DeserializeObj; 
+        }
     }
 }

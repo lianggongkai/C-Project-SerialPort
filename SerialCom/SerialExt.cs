@@ -14,31 +14,18 @@ namespace SerialExt {
         public string Name { set; get; }       /* log name */
         private string Timestamp;               /* log name timestamp */
         public bool SaveEnable { set; get; }    /* save log enable */
-        public bool tsNameEnable { set; get; }  /* log file name add timestamp enable */
+        //public bool tsNameEnable { set; get; }  /* log file name add timestamp enable */
         public string ExeLog { set; get; }      /* excute open log program */
         private UInt32 maxSize = 256;           /* log max size, unit:(MB)*/
         private UInt16 sameCnt;
-        
-        private void CheckLogPath()
-        {
-            if (System.IO.Directory.Exists(Path) == false)
-            {
-                try
-                {
-                    System.IO.Directory.CreateDirectory(Path);
-                } catch (Exception ex) {
-                    Path = Directory.GetCurrentDirectory();
-                    throw ex;
-                }
-            }
-        }
-       
+        private long logSize;
+
         public void DefaultConfig()
         {
             Path = System.IO.Directory.GetCurrentDirectory() + @"\Log";
             Name = "SerialLog";
             SaveEnable = false;
-            tsNameEnable = true;
+            //tsNameEnable = true;
             ExeLog = "";
             sameCnt = 0;
         }
@@ -50,52 +37,52 @@ namespace SerialExt {
                 this.sameCnt = 0;
             }
         }
-
+        private void CheckLogPath() {
+            if (System.IO.Directory.Exists(Path) == false)
+            {
+                try
+                {
+                    System.IO.Directory.CreateDirectory(Path);
+                }
+                catch (Exception ex)
+                {
+                    Path = Directory.GetCurrentDirectory();
+                    throw ex;
+                }
+            }
+        }
         /* when open save log action excute this */
         public void UpdateNameTimestamp()
         {
             this.Timestamp = "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            /*if (this.tsNameEnable)
-            {
-                this.Timestamp = "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            } else {
-                this.Timestamp = "_" + sameCnt.ToString("#000");
-            } */
             CheckLogPath();
         }
         public string GetLogName()
         {
-            //UpdateNameTimestamp();
+            if (logSize / (1024 * 1024) >= this.maxSize)
+            {
+                UpdateNameTimestamp();
+            }
             return this.Name + this.Timestamp + ".txt";
         }
         /* record log string to file */
         public void Log(string logStr)
         {
-            if (SaveEnable == false) return;
-            
-            try
-            {
+            if (SaveEnable == false)
+                return;
+            try {
                 string file = GetLogName();
                 string filename = this.Path + @"\" + file;
-                if (File.Exists(filename) != false)
-                {
-
-                }
                 StreamWriter writer = new StreamWriter(filename, true, Encoding.ASCII);
                 FileInfo fileinfo = new FileInfo(filename);
-                if (fileinfo.Length / (1024*1024) >= this.maxSize)
-                {
-                    UpdateNameTimestamp();
-                }
+                logSize = fileinfo.Length;
                 if (writer != null)
                 {
                     writer.Write(logStr);
                     writer.Flush();
                     writer.Close();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 throw (ex);
             }
         }
@@ -104,14 +91,13 @@ namespace SerialExt {
     [Serializable]
     class SelfdefSerial : SerialPort {
         private byte[] buffer = new byte[1024];
-        private UIAsyncHandle startUIAsyncHandle;
-        private UIAsyncHandle stopUIAsyncHandle;
+        private UIAsyncHandle UIAsyncHandleFunc;
         private int lineRecvDataCnt;
-        public string savePath;
-        public string saveName;
+       
         public bool timeStampEnable { get; set; }
         public string tsFormat { get; set; }
         public UInt32 totalRecvDataCnt { set; get; }
+        public bool isDispAsiic { set; get; }   /* display uart data assic or not */
         public bool OpenPort()
         {
             this.DataReceived += Uart_DataReceived;
@@ -128,7 +114,6 @@ namespace SerialExt {
         public void ClosePort()
         {
             this.DataReceived -= Uart_DataReceived;
-            stopUIAsyncHandle?.Invoke("");
             this.Close();
             this.Dispose();
         }
@@ -142,13 +127,16 @@ namespace SerialExt {
             this.ReadTimeout = port.ReadTimeout;
             this.WriteTimeout = port.WriteTimeout;
         }
-        public void setStartUIAsyncHandle(UIAsyncHandle func)
+        public void AddUIAsyncHandle(UIAsyncHandle func)
         {
-            startUIAsyncHandle += new UIAsyncHandle(func);
+            UIAsyncHandleFunc += new UIAsyncHandle(func);
         }
-        public void setStoptUIAsyncHandle(UIAsyncHandle func)
+        public void SubUIAsyncHandle(UIAsyncHandle func)
         {
-            stopUIAsyncHandle += new UIAsyncHandle(func);
+            UIAsyncHandleFunc -= new UIAsyncHandle(func);
+        }
+        public void ClearUIAsyncHandle() {
+            UIAsyncHandleFunc = null;
         }
         private string RecvDataToString()
         {
@@ -177,27 +165,53 @@ namespace SerialExt {
             }
             return val;
         }
-        private void Uart_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            byte[] temp = new byte[this.BytesToRead];
-            bool is_one_line = false;
-            if (this.Read(temp, 0, temp.Length) == 0) {
-                return;
-            }
-            foreach (var item in temp) {
-                if (item == 0x0d) {
-                    is_one_line = true;
-                    break;
+
+        private List<string> HandleRCVFrameData(byte[] recvData, string curTime, bool is_to_hex) {
+            List<string> res_list = new List<string>();
+            if (recvData == null) return null;
+            int linecnt = 0;
+            int offset = 0;
+            foreach (var item in recvData)
+            {
+                linecnt++;
+                if (item == 0x0a)
+                {
+                    string linestr = "";
+                    if (is_to_hex)
+                    {
+                        for (int i = 0; i < linecnt; i++)
+                        {
+                            linestr += recvData[offset + i].ToString("X2") + " ";
+                        }
+                        linestr += "\n";
+                    }
+                    else
+                    {
+                        linestr = this.Encoding.GetString(recvData, offset, linecnt);
+                    }
+                    res_list.Add(curTime + linestr);
+                    offset += linecnt;
+                    linecnt = 0;
                 }
             }
-            Array.Copy(temp, buffer, temp.Length);
-            lineRecvDataCnt += temp.Length;
-            totalRecvDataCnt += (UInt32)temp.Length;
-            if (is_one_line) {
-                string ts = CurrentTimeStampToString();
-                string data = RecvDataToString();
-                startUIAsyncHandle?.Invoke(ts + data);
+            return res_list;
+        }
+        private void Uart_DataReceived(object sender, SerialDataReceivedEventArgs e) 
+        {
+            try
+            {
+                byte[] tmp = new byte[this.BytesToRead + 10];
+                int cnt = this.Read(tmp, 0, tmp.Length);
+                if (cnt == 0) return;
+                List<string> list_str = HandleRCVFrameData(tmp, $"[{DateTime.Now.ToString("HH:mm:ss.fff")}]: ", isDispAsiic);
+                foreach (var item in list_str)
+                {
+                    UIAsyncHandleFunc?.Invoke(item);
+                }
+            } catch (Exception ex) {
+                string disp = ex.GetType().Name + ", " + ex.Message;
+                MessageBox.Show(disp);
             }
-        }   
+        }
     }
 }
