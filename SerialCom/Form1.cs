@@ -15,7 +15,25 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SerialCom
 {
-    public delegate void FuncUart(string m);
+    enum WMS {
+        WM_DEVICECHANGE = 0x219,
+    };
+
+    enum DBT {
+        DBT_DEVICEARRIVAL = 0x8000,
+        DBT_CONFIGCHANGECANCELED = 0x0019,
+        DBT_CONFIGCHANGED = 0x0018,
+        DBT_CUSTOMEVENT = 0x8006,
+        DBT_DEVICEQUERYREMOVE = 0x8001,
+        DBT_DEVICEQUERYREMOVEFAILED = 0x8002,
+        DBT_DEVICEREMOVECOMPLETE = 0x8004,
+        DBT_DEVICEREMOVEPENDING = 0x8003,
+        DBT_DEVICETYPESPECIFIC = 0x8005,
+        DBT_DEVNODES_CHANGED = 0x0007,
+        DBT_QUERYCHANGECONFIG = 0x0017,
+        DBT_USERDEFINED = 0xFFFF,
+    };
+
     public partial class Form1 : Form
     {
         public Form1()
@@ -201,6 +219,23 @@ namespace SerialCom
         {
             string []portname = SelfdefSerial.GetPortNames();
             dsPortName.DataSource = portname;
+        }
+
+        /* override system windows message of Serial put in or pull out */
+        protected override void DefWndProc(ref Message m)
+        {
+            if (m.Msg == (int)WMS.WM_DEVICECHANGE) //device state change, put in or pull out
+            {
+                if (m.WParam.ToInt32() == (Int32)DBT.DBT_DEVICEREMOVECOMPLETE) //USB serial device remove
+                {
+                    btnChangeCloseUartUI();
+                    dsPortName.DataSource = SelfdefSerial.GetPortNames();
+                } else if (m.WParam.ToInt32() == (Int32)DBT.DBT_DEVICEARRIVAL) //USB serial device put in
+                {
+                    dsPortName.DataSource = SelfdefSerial.GetPortNames();
+                } 
+            }
+            base.DefWndProc(ref m);
         }
     }
 }
