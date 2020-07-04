@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SerialExt {
+    /* ----- define serial log class -------*/
     [Serializable]
     class SelfLog {
         public string Path { set; get; }       /* log path */
@@ -17,7 +18,6 @@ namespace SerialExt {
         //public bool tsNameEnable { set; get; }  /* log file name add timestamp enable */
         public string ExeLog { set; get; }      /* excute open log program */
         private UInt32 maxSize = 256;           /* log max size, unit:(MB)*/
-        private UInt16 sameCnt;
         private long logSize;
 
         public void DefaultConfig()
@@ -25,18 +25,17 @@ namespace SerialExt {
             Path = System.IO.Directory.GetCurrentDirectory() + @"\Log";
             Name = "SerialLog";
             SaveEnable = false;
-            //tsNameEnable = true;
             ExeLog = "";
-            sameCnt = 0;
         }
+
         public void SetFileName(string filename)
         {
             if ((filename != null) && (filename != this.Name))
             {
                 this.Name = filename;
-                this.sameCnt = 0;
             }
         }
+
         private void CheckLogPath() {
             if (System.IO.Directory.Exists(Path) == false)
             {
@@ -51,12 +50,14 @@ namespace SerialExt {
                 }
             }
         }
+
         /* when open save log action excute this */
         public void UpdateNameTimestamp()
         {
             this.Timestamp = "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
             CheckLogPath();
         }
+
         public string GetLogName()
         {
             if (logSize / (1024 * 1024) >= this.maxSize)
@@ -65,6 +66,7 @@ namespace SerialExt {
             }
             return this.Name + this.Timestamp + ".txt";
         }
+
         /* record log string to file */
         public void Log(string logStr)
         {
@@ -87,6 +89,8 @@ namespace SerialExt {
             }
         }
     }
+
+    /* -------- selfdefine serial port class -----------*/
     public delegate void UIAsyncHandle(string data);
     [Serializable]
     class SelfdefSerial : SerialPort {
@@ -99,6 +103,7 @@ namespace SerialExt {
         public string tsFormat { get; set; }
         public UInt32 totalRecvDataCnt { set; get; }
         public bool isDispAsiic { set; get; }   /* display uart data assic or not */
+
         public bool OpenPort()
         {
             this.DataReceived += Uart_DataReceived;
@@ -112,6 +117,7 @@ namespace SerialExt {
             }
             return false;
         }
+
         public void ClosePort()
         {
             Closing = true;
@@ -124,27 +130,34 @@ namespace SerialExt {
             this.Dispose();
             Closing = false;
         }
-        public void ConfigPort(SelfdefSerial port)
+
+        public void ConfigPort(string portName, int boudRate = 115200, 
+            int dataBit = 8, int stopBit = 1, int rdTimeOut = 5000, 
+            int wrTimeout = 1000)
         {
-            this.BaudRate = port.BaudRate;
-            this.Parity = port.Parity;
-            this.PortName = port.PortName;
-            this.DataBits = port.DataBits;
-            this.StopBits = port.StopBits;
-            this.ReadTimeout = port.ReadTimeout;
-            this.WriteTimeout = port.WriteTimeout;
+            this.PortName = portName;
+            this.BaudRate = boudRate;
+            this.DataBits = dataBit;
+            this.StopBits = (StopBits)stopBit;
+            this.ReadTimeout = rdTimeOut;
+            this.WriteTimeout = wrTimeout;
         }
+
         public void AddUIAsyncHandle(UIAsyncHandle func)
         {
             UIAsyncHandleFunc += new UIAsyncHandle(func);
         }
+
         public void SubUIAsyncHandle(UIAsyncHandle func)
         {
             UIAsyncHandleFunc -= new UIAsyncHandle(func);
         }
-        public void ClearUIAsyncHandle() {
+
+        public void ClearUIAsyncHandle()
+        {
             UIAsyncHandleFunc = null;
         }
+
         private string RecvDataToString()
         {
             string val = "";
@@ -205,7 +218,8 @@ namespace SerialExt {
             }
             return res_list;
         }
-        private void Uart_DataReceived(object sender, SerialDataReceivedEventArgs e) 
+
+        private void Uart_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (Closing) return;
             try
@@ -227,4 +241,5 @@ namespace SerialExt {
             }
         }
     }
+
 }

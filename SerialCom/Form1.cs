@@ -75,27 +75,6 @@ namespace SerialCom
             log.ExeLog = logOpt.logExe;
         }
 
-        public bool UpdateSerialPortParameter(string portName, int boudRate = 115200, int dataBit = 8, 
-            int stopBit = 1, int timeOut = 5000)
-        {
-            SelfdefSerial sp = new SelfdefSerial();
-            if (portName == string.Empty) return false;
-            sp.PortName = portName;
-            sp.BaudRate = boudRate;
-            sp.DataBits = dataBit;
-            sp.StopBits = (StopBits)stopBit;
-            sp.ReadTimeout = timeOut;
-            com.ConfigPort(sp);
-            try {
-                com.OpenPort();
-                if (com.IsOpen) return true;
-            } catch(Exception e) {
-                throw e;
-            }
-            
-            return false;
-        }
-
         private void btnOpenUart_Click(object sender, EventArgs e)
         {
             OpenOrCloseSerial();
@@ -120,8 +99,9 @@ namespace SerialCom
             }
             if (com.IsOpen == false) {
                 try {
-                    if (UpdateSerialPortParameter(dsPortName.Text, int.Parse(dsBaudrate.Text),
-                        int.Parse(dsDataBit.Text), int.Parse(dsStopBit.Text)) == true) {
+                    com.ConfigPort(dsPortName.Text, int.Parse(dsBaudrate.Text),
+                        int.Parse(dsDataBit.Text), int.Parse(dsStopBit.Text));
+                    if (com.OpenPort()) {
                         com.AddUIAsyncHandle(DispUartData);
                         com.AddUIAsyncHandle(SaveUartData);
                         btnChangeOpenUartUI();
