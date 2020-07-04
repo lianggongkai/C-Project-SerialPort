@@ -215,7 +215,8 @@
             this.dsPortName.Name = "dsPortName";
             this.dsPortName.Size = new System.Drawing.Size(128, 32);
             this.dsPortName.TabIndex = 0;
-         
+            this.dsPortName.DropDown += new System.EventHandler(this.dsPortName_DropDown);
+
             // 
             // btnOpenUart
             // 

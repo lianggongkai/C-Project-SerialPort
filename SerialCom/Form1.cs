@@ -196,5 +196,11 @@ namespace SerialCom
                 }
             }
         }
+
+        private void dsPortName_DropDown(object sender, EventArgs e)
+        {
+            string []portname = SelfdefSerial.GetPortNames();
+            dsPortName.DataSource = portname;
+        }
     }
 }
