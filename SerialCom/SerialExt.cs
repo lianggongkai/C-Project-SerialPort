@@ -93,7 +93,8 @@ namespace SerialExt {
         private byte[] buffer = new byte[1024];
         private UIAsyncHandle UIAsyncHandleFunc;
         private int lineRecvDataCnt;
-       
+        private bool Closing = false;
+        private bool Listening = false;
         public bool timeStampEnable { get; set; }
         public string tsFormat { get; set; }
         public UInt32 totalRecvDataCnt { set; get; }
@@ -113,9 +114,15 @@ namespace SerialExt {
         }
         public void ClosePort()
         {
+            Closing = true;
+            while (Listening)
+            {
+                Application.DoEvents();
+            }
             this.DataReceived -= Uart_DataReceived;
             this.Close();
             this.Dispose();
+            Closing = false;
         }
         public void ConfigPort(SelfdefSerial port)
         {
@@ -192,17 +199,21 @@ namespace SerialExt {
                     res_list.Add(curTime + linestr);
                     offset += linecnt;
                     linecnt = 0;
+                } else { /* TODO: fix this else, or it maybe cause bug */
+
                 }
             }
             return res_list;
         }
         private void Uart_DataReceived(object sender, SerialDataReceivedEventArgs e) 
         {
+            if (Closing) return;
             try
             {
                 byte[] tmp = new byte[this.BytesToRead + 10];
                 int cnt = this.Read(tmp, 0, tmp.Length);
                 if (cnt == 0) return;
+                Listening = true;
                 List<string> list_str = HandleRCVFrameData(tmp, $"[{DateTime.Now.ToString("HH:mm:ss.fff")}]: ", isDispAsiic);
                 foreach (var item in list_str)
                 {
@@ -211,6 +222,8 @@ namespace SerialExt {
             } catch (Exception ex) {
                 string disp = ex.GetType().Name + ", " + ex.Message;
                 MessageBox.Show(disp);
+            } finally {
+                this.Listening = false;
             }
         }
     }
