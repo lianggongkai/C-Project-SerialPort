@@ -229,6 +229,7 @@ namespace SerialCom
                 if (m.WParam.ToInt32() == (Int32)DBT.DBT_DEVICEREMOVECOMPLETE) //USB serial device remove
                 {
                     btnChangeCloseUartUI();
+                    com.ClearUIAsyncHandle();
                     dsPortName.DataSource = SelfdefSerial.GetPortNames();
                 } else if (m.WParam.ToInt32() == (Int32)DBT.DBT_DEVICEARRIVAL) //USB serial device put in
                 {

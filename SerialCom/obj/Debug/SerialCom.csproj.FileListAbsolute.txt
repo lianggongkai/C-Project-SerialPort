@@ -58,3 +58,14 @@ F:\_source_code\C#_prj\SerialCom-Enhance-7-3\SerialCom-Enhance\SerialCom\obj\Deb
 F:\_source_code\C#_prj\SerialCom-Enhance-7-3\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
 F:\_source_code\C#_prj\SerialCom-Enhance-7-3\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.exe
 F:\_source_code\C#_prj\SerialCom-Enhance-7-3\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.pdb
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.exe.config
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.exe
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.pdb
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.exe
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\bin\Debug\SerialCom.pdb
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csprojResolveAssemblyReference.cache
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Form1.resources
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.Properties.Resources.resources
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.SetOption.resources
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.SetOptLog.resources
+D:\lianggongke\参考资料\学习\C#\SerialCom-Enhance-2020-0705\SerialCom-Enhance\SerialCom\obj\Debug\SerialCom.csproj.GenerateResource.Cache
